@@ -27,18 +27,18 @@ class ticTacToe {
         else game[yCoordinate - 1][xCoordinate - 1] = 'O';
     }
 
-     void clear(int xCoordinate, int yCoordinate) {
+    void clear(int xCoordinate, int yCoordinate) {
         game[yCoordinate - 1][xCoordinate - 1] = '-';
     }
 
     int[] longestCross() {
-        int[] kostil = {0,0,0,0};
+        int[] kostil = {0, 0, 0, 0};
         int[] result = new int[0];
         int[] res = new int[0];
         for (int i = 0; i < size - 1; i++) {
             for (int j = 0; j < size - 1; j++) {
                 if (game[i][j] == '✕') res = scan(i, j);
-                if (!Arrays.equals(kostil,res)) result = res;
+                if (!Arrays.equals(kostil, res)) result = res;
             }
         }
         System.out.println(Arrays.toString(result));
@@ -48,14 +48,19 @@ class ticTacToe {
     }
 
     private int[] longestNull() {
-        int[] result = new int[5];
+        int[] kostil = {0, 0, 0, 0};
+        int[] result = new int[0];
+        int[] res = new int[0];
         for (int i = 0; i < size - 1; i++) {
             for (int j = 0; j < size - 1; j++) {
-                if (game[i][j] == 'O') result = scan(i, j);
-                result[4] = longestSequence;
+                if (game[i][j] == 'O') res = scan(i, j);
+                if (!Arrays.equals(kostil, res)) result = res;
             }
         }
+        System.out.println(Arrays.toString(result));
+        System.out.print(longestSequence);
         return result;
+
     }
 
     private int[] scan(int x, int y) {
@@ -66,12 +71,16 @@ class ticTacToe {
                 count++;
                 if (count > longestSequence) {
                     longestSequence = count;
-                    result[0] = x+1;
-                    result[1] = y+1;
-                    result[2] = i1+1;
-                    result[3] = y+1;
+                    result[0] = x + 1;
+                    result[1] = y + 1;
+                    result[2] = i1 + 1;
+                    result[3] = y + 1;
                 }
-            } else count = 1;
+            } else {
+                count = 1;
+                break;
+
+            }
 
         }
         count = 1;
@@ -80,14 +89,16 @@ class ticTacToe {
                 count++;
                 if (count > longestSequence) {
                     longestSequence = count;
-                    result[0] = x+1;
-                    result[1] = y+1;
-                    result[2] = x+1;
-                    result[3] = i1+1;
+                    result[0] = x + 1;
+                    result[1] = y + 1;
+                    result[2] = x + 1;
+                    result[3] = i1 + 1;
                 }
-            } else count = 1;
+            } else {
+                count = 1;
+                break;
 
-
+            }
         }
         count = 1;
         for (int i1 = x + 1, j1 = y + 1; i1 < size && j1 < size; j1++, i1++) { //diagonal1
@@ -95,14 +106,16 @@ class ticTacToe {
                 count++;
                 if (count > longestSequence) {
                     longestSequence = count;
-                    result[0] = x+1;
-                    result[1] = y+1;
-                    result[2] = i1+1;
-                    result[3] = j1+1;
+                    result[0] = x + 1;
+                    result[1] = y + 1;
+                    result[2] = i1 + 1;
+                    result[3] = j1 + 1;
                 }
-            } else count = 1;
+            } else {
+                count = 1;
+                break;
 
-
+            }
         }
         count = 1;
         for (int i1 = x - 1, j1 = y + 1; i1 > 0 && j1 < size; j1++, i1--) { //diagonal2
@@ -110,12 +123,16 @@ class ticTacToe {
                 count++;
                 if (count > longestSequence) {
                     longestSequence = count;
-                    result[0] = x+1;
-                    result[1] = y+1;
-                    result[2] = i1+1;
-                    result[3] = j1+1;
+                    result[0] = x + 1;
+                    result[1] = y + 1;
+                    result[2] = i1 + 1;
+                    result[3] = j1 + 1;
                 }
-            } else count = 1;
+            } else {
+                count = 1;
+                break;
+
+            }
         }
 
         return result;
