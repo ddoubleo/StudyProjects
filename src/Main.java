@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Main {
     public static void main(String[] args) {
         ticTacToe first = new ticTacToe();
@@ -9,7 +11,8 @@ public class Main {
         first.clear(2, 3);
         first.add(true, 3, 3);
         first.print();
-        first.longestCross();
-
+        //first.longestCross();
+        System.out.println(Arrays.toString(first.longestNull()));
+        System.out.println(Arrays.toString(first.longestCross()));
     }
 }

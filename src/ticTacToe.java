@@ -3,7 +3,10 @@ import java.util.Arrays;
 class ticTacToe {
     private char[][] game;
     private int size;
-    private int longestSequence = 0;
+    private int longestSequence = 1;
+    private boolean containsNull = false;
+    private boolean containsCross = false;
+    private boolean lsWasChanged = false;
 
     ticTacToe() {
         size = 5;
@@ -23,47 +26,74 @@ class ticTacToe {
     }
 
     void add(boolean flag, int xCoordinate, int yCoordinate) {
-        if (flag) game[yCoordinate - 1][xCoordinate - 1] = '✕';
-        else game[yCoordinate - 1][xCoordinate - 1] = 'O';
+        if (flag) {
+            game[yCoordinate - 1][xCoordinate - 1] = '✕';
+            containsCross = true;
+        } else {
+            game[yCoordinate - 1][xCoordinate - 1] = 'O';
+            containsNull = true;
+        }
     }
 
     void clear(int xCoordinate, int yCoordinate) {
         game[yCoordinate - 1][xCoordinate - 1] = '-';
     }
 
-    int[] longestCross() {
-        int[] kostil = {0, 0, 0, 0};
+    int[] longestCross() { //Возвращает массив с координатами начала, конца и длиной последовательности; пустой массив - таких элементов нет
+        longestSequence = 1;
+        int[] check = {0, 0, 0, 0};
         int[] result = new int[0];
         int[] res = new int[0];
+        if (!containsCross) return result;
+        int[] singleCross = new int[4];
         for (int i = 0; i < size - 1; i++) {
             for (int j = 0; j < size - 1; j++) {
-                if (game[i][j] == '✕') res = scan(i, j);
-                if (!Arrays.equals(kostil, res)) result = res;
+                if (game[i][j] == '✕') {
+                    res = Arrays.copyOf(scan(i, j), 4);
+                    if (!Arrays.equals(check, res)) {
+                        if (lsWasChanged) {
+                            result = Arrays.copyOf(res, 5);
+                            result[4] = longestSequence;
+                        }
+                    } else {
+                        singleCross = new int[]{j, i, j, i, 1};
+                    }
+                }
             }
         }
-        System.out.println(Arrays.toString(result));
-        System.out.print(longestSequence);
-        return result;
-
+        if (result.length != 0) return result;
+        else return singleCross;
     }
 
-    private int[] longestNull() {
-        int[] kostil = {0, 0, 0, 0};
+
+    int[] longestNull() { //Возвращает массив с координатами начала, конца и длиной последовательности; пустой массив - таких элементов нет
+        longestSequence = 1;
+        int[] check = {0, 0, 0, 0};
         int[] result = new int[0];
         int[] res = new int[0];
+        if (!containsNull) return result;
+        int[] singleNull = new int[4];
         for (int i = 0; i < size - 1; i++) {
             for (int j = 0; j < size - 1; j++) {
-                if (game[i][j] == 'O') res = scan(i, j);
-                if (!Arrays.equals(kostil, res)) result = res;
+                if (game[i][j] == 'O') {
+                    res = Arrays.copyOf(scan(i, j), 4);
+                    if (!Arrays.equals(check, res)) {
+                        if (lsWasChanged) {
+                            result = Arrays.copyOf(res, 5);
+                            result[4] = longestSequence;
+                        }
+                    } else {
+                        singleNull = new int[]{j, i, j, i, 1};
+                    }
+                }
             }
         }
-        System.out.println(Arrays.toString(result));
-        System.out.print(longestSequence);
-        return result;
-
+        if (result.length != 0) return result;
+        else return singleNull;
     }
 
     private int[] scan(int x, int y) {
+        lsWasChanged = false;
         int[] result = new int[4];
         int count = 1;
         for (int i1 = x + 1; i1 < size; i1++) { //horizontal
@@ -71,6 +101,7 @@ class ticTacToe {
                 count++;
                 if (count > longestSequence) {
                     longestSequence = count;
+                    lsWasChanged = true;
                     result[0] = x + 1;
                     result[1] = y + 1;
                     result[2] = i1 + 1;
@@ -89,6 +120,7 @@ class ticTacToe {
                 count++;
                 if (count > longestSequence) {
                     longestSequence = count;
+                    lsWasChanged = true;
                     result[0] = x + 1;
                     result[1] = y + 1;
                     result[2] = x + 1;
@@ -101,11 +133,12 @@ class ticTacToe {
             }
         }
         count = 1;
-        for (int i1 = x + 1, j1 = y + 1; i1 < size && j1 < size; j1++, i1++) { //diagonal1
+        for (int i1 = x + 1, j1 = y + 1; i1 < size && j1 < size; j1++, i1++) { //diagonal_1
             if (game[i1][j1] == game[i1 - 1][j1 - 1]) {
                 count++;
                 if (count > longestSequence) {
                     longestSequence = count;
+                    lsWasChanged = true;
                     result[0] = x + 1;
                     result[1] = y + 1;
                     result[2] = i1 + 1;
@@ -118,11 +151,12 @@ class ticTacToe {
             }
         }
         count = 1;
-        for (int i1 = x - 1, j1 = y + 1; i1 > 0 && j1 < size; j1++, i1--) { //diagonal2
+        for (int i1 = x - 1, j1 = y + 1; i1 > 0 && j1 < size; j1++, i1--) { //diagonal_2
             if (game[i1][j1] == game[i1 + 1][j1 - 1]) {
                 count++;
                 if (count > longestSequence) {
                     longestSequence = count;
+                    lsWasChanged = true;
                     result[0] = x + 1;
                     result[1] = y + 1;
                     result[2] = i1 + 1;
