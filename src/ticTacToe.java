@@ -46,8 +46,8 @@ class ticTacToe {
         int[] res = new int[0];
         if (!containsCross) return result;
         int[] singleCross = new int[4];
-        for (int i = 0; i < size - 1; i++) {
-            for (int j = 0; j < size - 1; j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 if (game[i][j] == '✕') {
                     res = Arrays.copyOf(scan(i, j), 4);
                     if (!Arrays.equals(check, res)) {
@@ -151,7 +151,7 @@ class ticTacToe {
             }
         }
         count = 1;
-        for (int i1 = x - 1, j1 = y + 1; i1 > 0 && j1 < size; j1++, i1--) { //diagonal_2
+        for (int i1 = x - 1, j1 = y + 1; i1 >= 0 && j1 < size; j1++, i1--) { //diagonal_2
             if (game[i1][j1] == game[i1 + 1][j1 - 1]) {
                 count++;
                 if (count > longestSequence) {
