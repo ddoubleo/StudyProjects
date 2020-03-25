@@ -83,7 +83,7 @@ class ticTacToe {
                             result[4] = longestSequence;
                         }
                     } else {
-                        singleNull = new int[]{j, i, j, i, 1};
+                        singleNull = new int[]{j+1, i+1, j+1, i+1, 1};
                     }
                 }
             }
