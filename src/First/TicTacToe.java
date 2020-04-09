@@ -1,35 +1,59 @@
 package First;
+
 import java.util.Arrays;
 import java.util.Map;
 
 class TicTacToe {
-    private char[][] game;
+    private int[][] game;
     private int size;
     private int longestSequence = 1;
     private boolean containsNull = false;
     private boolean containsCross = false;
     private boolean lsWasChanged = false;
-    private Map<String, Character> referenceTable = Map.of("Cross", '✕', "Null", 'O');
+    private Map<String, Integer> referenceTable = Map.of("Cross", 1,
+            "cross", 1,
+            "x", 1,
+            "X", 1,
+            "Null", 2,
+            "o", 2,
+            "O", 2,
+            "0", 2,
+            "null", 2);
 
     TicTacToe() {
         size = 5;
-        game = new char[size][size];
+        game = new int[size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                game[i][j] = '-';
+                game[i][j] = 0;
             }
         }
     }
 
-    void print() {
+    @Override
+    public String toString() {
+        return (String.format(Arrays.deepToString(game)
+                .replace("],", "\n").replace(",", "\t| ")
+                .replaceAll("[\\[\\]]", " ").replaceAll("0", " ")
+                .replaceAll("1", "X").replaceAll("2", "O")));
+    }
+    /*void print() {
         System.out.println(Arrays.deepToString(game)
                 .replace("],", "\n").replace(",", "\t| ")
                 .replaceAll("[\\[\\]]", " "));
         System.out.println("\n");
+}*/
+
+    public void cleanAll() {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                game[i][j] = 0;
+            }
+        }
     }
 
-    void add(String flag, int xCoordinate, int yCoordinate) {
-        if (flag.equals("Cross")) {
+    public void add(String flag, int xCoordinate, int yCoordinate) {
+        if (referenceTable.get(flag) == 1) {
             containsCross = true;
         } else {
             containsNull = true;
@@ -39,20 +63,22 @@ class TicTacToe {
 
     }
 
-    void clear(int xCoordinate, int yCoordinate) {
-        game[yCoordinate - 1][xCoordinate - 1] = '-';
+    public void clean(int xCoordinate, int yCoordinate) {
+        game[yCoordinate - 1][xCoordinate - 1] = 0;
     }
 
-    int[] longest(String flag) {
+    public int[] longest(String flag) {  //Возвращает координаты начала, конца и длину последовательности символов
         longestSequence = 1;
         int[] check = {0, 0, 0, 0};
         int[] result = new int[0];
-        int[] res = new int[0];
-        if (!containsCross) return result;
-        int[] singleCross = new int[4];
+        int[] res;
+        if (referenceTable.get(flag) == 1)
+            if (!containsCross) return result;
+            else if (!containsNull) return result;
+        int[] singleElement = new int[4];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (game[i][j] == referenceTable.get(flag)) {
+                if (referenceTable.get(flag) == game[i][j]) {
                     res = Arrays.copyOf(scan(i, j), 4);
                     if (!Arrays.equals(check, res)) {
                         if (lsWasChanged) {
@@ -60,32 +86,19 @@ class TicTacToe {
                             result[4] = longestSequence;
                         }
                     } else {
-                        singleCross = new int[]{j, i, j, i, 1};
+                        singleElement = new int[]{j+1, i+1, j+1, i+1, 1};
                     }
                 }
             }
         }
         if (result.length != 0) return result;
-        else return singleCross;
+        else return singleElement;
     }
-
 
     private int[] scan(int x, int y) {
         lsWasChanged = false;
         int[] result = new int[4];
         int currentLength = 1;
-        for (int count = 0; count<1; count++){
-            switch (count){
-
-
-            }
-
-        }
-
-
-
-
-
         for (int i1 = x + 1; i1 < size; i1++) { //horizontal
             if (game[i1][y] == game[i1 - 1][y]) {
                 currentLength++;
