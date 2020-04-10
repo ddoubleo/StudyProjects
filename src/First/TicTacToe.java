@@ -10,6 +10,7 @@ class TicTacToe {
     private boolean containsNull = false;
     private boolean containsCross = false;
     private boolean lsWasChanged = false;
+    //private int currentLength = 1;
     private Map<String, Integer> referenceTable = Map.of("Cross", 1,
             "cross", 1,
             "x", 1,
@@ -72,9 +73,9 @@ class TicTacToe {
         int[] check = {0, 0, 0, 0};
         int[] result = new int[0];
         int[] res;
-        if (referenceTable.get(flag) == 1)
+        if (referenceTable.get(flag) == 1) {
             if (!containsCross) return result;
-            else if (!containsNull) return result;
+        } else if (!containsNull) return result;
         int[] singleElement = new int[4];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -86,7 +87,7 @@ class TicTacToe {
                             result[4] = longestSequence;
                         }
                     } else {
-                        singleElement = new int[]{j+1, i+1, j+1, i+1, 1};
+                        singleElement = new int[]{j + 1, i + 1, j + 1, i + 1, 1};
                     }
                 }
             }
@@ -105,10 +106,10 @@ class TicTacToe {
                 if (currentLength > longestSequence) {
                     longestSequence = currentLength;
                     lsWasChanged = true;
-                    result[0] = x + 1;
-                    result[1] = y + 1;
-                    result[2] = i1 + 1;
-                    result[3] = y + 1;
+                    result[0] = y + 1;
+                    result[1] = x + 1;
+                    result[2] = y + 1;
+                    result[3] = i1 + 1;
                 }
             } else {
                 currentLength = 1;
@@ -124,10 +125,10 @@ class TicTacToe {
                 if (currentLength > longestSequence) {
                     longestSequence = currentLength;
                     lsWasChanged = true;
-                    result[0] = x + 1;
-                    result[1] = y + 1;
-                    result[2] = x + 1;
-                    result[3] = i1 + 1;
+                    result[0] = y + 1;
+                    result[1] = x + 1;
+                    result[2] = i1 + 1;
+                    result[3] = x + 1;
                 }
             } else {
                 currentLength = 1;
