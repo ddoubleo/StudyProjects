@@ -10,7 +10,8 @@ class TicTacToe {
     private boolean containsNull = false;
     private boolean containsCross = false;
     private boolean lsWasChanged = false;
-    //private int currentLength = 1;
+    private int currentLength = 1;
+    private int[] result = new int[4];
     private Map<String, Integer> referenceTable = Map.of("Cross", 1,
             "cross", 1,
             "x", 1,
@@ -71,65 +72,51 @@ class TicTacToe {
     public int[] longest(String flag) {  //Возвращает координаты начала, конца и длину последовательности символов
         longestSequence = 1;
         int[] check = {0, 0, 0, 0};
-        int[] result = new int[0];
+        int[] out = new int[0];
         int[] res;
         if (referenceTable.get(flag) == 1) {
-            if (!containsCross) return result;
-        } else if (!containsNull) return result;
-        int[] singleElement = new int[4];
+            if (!containsCross) return out;
+        } else if (!containsNull) return out;
+        int[] singleElement = new int[5];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (referenceTable.get(flag) == game[i][j]) {
-                    res = Arrays.copyOf(scan(i, j), 4);
+                    scan(i, j);
+                    res = Arrays.copyOf(result, 4);
                     if (!Arrays.equals(check, res)) {
                         if (lsWasChanged) {
-                            result = Arrays.copyOf(res, 5);
-                            result[4] = longestSequence;
+                            out = Arrays.copyOf(res, 5);
+                            out[4] = longestSequence;
                         }
-                    } else {
+                     else {
                         singleElement = new int[]{j + 1, i + 1, j + 1, i + 1, 1};
+                        }
                     }
                 }
             }
         }
-        if (result.length != 0) return result;
+        if (out.length != 0) return out;
         else return singleElement;
     }
 
     private int[] scan(int x, int y) {
         lsWasChanged = false;
-        int[] result = new int[4];
-        int currentLength = 1;
+        //int[] result = new int[4];
+        //int currentLength = 1;
         for (int i1 = x + 1; i1 < size; i1++) { //horizontal
             if (game[i1][y] == game[i1 - 1][y]) {
-                currentLength++;
-                if (currentLength > longestSequence) {
-                    longestSequence = currentLength;
-                    lsWasChanged = true;
-                    result[0] = y + 1;
-                    result[1] = x + 1;
-                    result[2] = y + 1;
-                    result[3] = i1 + 1;
-                }
+                walk(y + 1, x + 1, y + 1, i1 + 1);
             } else {
                 currentLength = 1;
                 break;
 
             }
-
         }
+
         currentLength = 1;
         for (int i1 = y + 1; i1 < size; i1++) { //vertical
             if (game[x][i1] == game[x][i1 - 1]) {
-                currentLength++;
-                if (currentLength > longestSequence) {
-                    longestSequence = currentLength;
-                    lsWasChanged = true;
-                    result[0] = y + 1;
-                    result[1] = x + 1;
-                    result[2] = i1 + 1;
-                    result[3] = x + 1;
-                }
+                walk(y + 1, x + 1, i1 + 1, x + 1);
             } else {
                 currentLength = 1;
                 break;
@@ -139,15 +126,7 @@ class TicTacToe {
         currentLength = 1;
         for (int i1 = x + 1, j1 = y + 1; i1 < size && j1 < size; j1++, i1++) { //diagonal_1
             if (game[i1][j1] == game[i1 - 1][j1 - 1]) {
-                currentLength++;
-                if (currentLength > longestSequence) {
-                    longestSequence = currentLength;
-                    lsWasChanged = true;
-                    result[0] = x + 1;
-                    result[1] = y + 1;
-                    result[2] = i1 + 1;
-                    result[3] = j1 + 1;
-                }
+                walk(x + 1, y + 1, i1 + 1, j1 + 1);
             } else {
                 currentLength = 1;
                 break;
@@ -157,15 +136,7 @@ class TicTacToe {
         currentLength = 1;
         for (int i1 = x - 1, j1 = y + 1; i1 >= 0 && j1 < size; j1++, i1--) { //diagonal_2
             if (game[i1][j1] == game[i1 + 1][j1 - 1]) {
-                currentLength++;
-                if (currentLength > longestSequence) {
-                    longestSequence = currentLength;
-                    lsWasChanged = true;
-                    result[0] = x + 1;
-                    result[1] = y + 1;
-                    result[2] = i1 + 1;
-                    result[3] = j1 + 1;
-                }
+                walk(x + 1, y + 1, i1 + 1, j1 + 1);
             } else {
                 currentLength = 1;
                 break;
@@ -176,4 +147,17 @@ class TicTacToe {
         return result;
     }
 
+
+    void walk(int a, int b, int c, int d) {
+        currentLength++;
+        if (currentLength > longestSequence) {
+            longestSequence = currentLength;
+            lsWasChanged = true;
+            result[0] = a;
+            result[1] = b;
+            result[2] = c;
+            result[3] = d;
+
+        }
+    }
 }
