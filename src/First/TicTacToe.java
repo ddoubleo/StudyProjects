@@ -4,15 +4,15 @@ import java.util.Arrays;
 import java.util.Map;
 
 class TicTacToe {
-    private int[][] game;
-    private int size;
+    private final int[][] game;
+    private final int size;
     private int longestSequence = 1;
     private boolean containsNull = false;
     private boolean containsCross = false;
     private boolean lsWasChanged = false;
     private int currentLength = 1;
-    private int[] result = new int[4];
-    private Map<String, Integer> referenceTable = Map.of("Cross", 1,
+    private final int[] result = new int[4];
+    private final Map<String, Integer> referenceTable = Map.of("Cross", 1,
             "cross", 1,
             "x", 1,
             "X", 1,
@@ -39,12 +39,6 @@ class TicTacToe {
                 .replaceAll("[\\[\\]]", " ").replaceAll("0", " ")
                 .replaceAll("1", "X").replaceAll("2", "O")));
     }
-    /*void print() {
-        System.out.println(Arrays.deepToString(game)
-                .replace("],", "\n").replace(",", "\t| ")
-                .replaceAll("[\\[\\]]", " "));
-        System.out.println("\n");
-}*/
 
     public void cleanAll() {
         for (int i = 0; i < size; i++) {
@@ -101,8 +95,6 @@ class TicTacToe {
 
     private int[] scan(int x, int y) {
         lsWasChanged = false;
-        //int[] result = new int[4];
-        //int currentLength = 1;
         for (int i1 = x + 1; i1 < size; i1++) { //horizontal
             if (game[i1][y] == game[i1 - 1][y]) {
                 walk(y + 1, x + 1, y + 1, i1 + 1);
@@ -148,7 +140,7 @@ class TicTacToe {
     }
 
 
-    void walk(int a, int b, int c, int d) {
+    private void walk(int a, int b, int c, int d) {
         currentLength++;
         if (currentLength > longestSequence) {
             longestSequence = currentLength;
