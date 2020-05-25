@@ -1,4 +1,4 @@
-package First;
+package first;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -10,7 +10,7 @@ class TicTacToe {
     private boolean containsNull = false;
     private boolean containsCross = false;
     private boolean lsWasChanged = false;
-    private int currentLength = 1;
+    //private int currentLength = 1;
     private final int[] result = new int[4];
     private final Map<String, Integer> referenceTable = Map.of("Cross", 1,
             "cross", 1,
@@ -22,8 +22,8 @@ class TicTacToe {
             "0", 2,
             "null", 2);
 
-    TicTacToe() {
-        size = 5;
+    TicTacToe(int size) {
+        this.size=size;
         game = new int[size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -94,10 +94,11 @@ class TicTacToe {
     }
 
     private int[] scan(int x, int y) {
+        int currentLength = 1;
         lsWasChanged = false;
         for (int i1 = x + 1; i1 < size; i1++) { //horizontal
             if (game[i1][y] == game[i1 - 1][y]) {
-                walk(y + 1, x + 1, y + 1, i1 + 1);
+                currentLength = walk(y + 1, x + 1, y + 1, i1 + 1,currentLength);
             } else {
                 currentLength = 1;
                 break;
@@ -108,7 +109,7 @@ class TicTacToe {
         currentLength = 1;
         for (int i1 = y + 1; i1 < size; i1++) { //vertical
             if (game[x][i1] == game[x][i1 - 1]) {
-                walk(y + 1, x + 1, i1 + 1, x + 1);
+                currentLength = walk(y + 1, x + 1, i1 + 1, x + 1,currentLength);
             } else {
                 currentLength = 1;
                 break;
@@ -118,7 +119,7 @@ class TicTacToe {
         currentLength = 1;
         for (int i1 = x + 1, j1 = y + 1; i1 < size && j1 < size; j1++, i1++) { //diagonal_1
             if (game[i1][j1] == game[i1 - 1][j1 - 1]) {
-                walk(x + 1, y + 1, i1 + 1, j1 + 1);
+                currentLength = walk(x + 1, y + 1, i1 + 1, j1 + 1,currentLength);
             } else {
                 currentLength = 1;
                 break;
@@ -128,7 +129,7 @@ class TicTacToe {
         currentLength = 1;
         for (int i1 = x - 1, j1 = y + 1; i1 >= 0 && j1 < size; j1++, i1--) { //diagonal_2
             if (game[i1][j1] == game[i1 + 1][j1 - 1]) {
-                walk(x + 1, y + 1, i1 + 1, j1 + 1);
+                currentLength = walk(x + 1, y + 1, i1 + 1, j1 + 1,currentLength);
             } else {
                 currentLength = 1;
                 break;
@@ -140,7 +141,7 @@ class TicTacToe {
     }
 
 
-    private void walk(int a, int b, int c, int d) {
+    private int walk(int a, int b, int c, int d, int currentLength) {
         currentLength++;
         if (currentLength > longestSequence) {
             longestSequence = currentLength;
@@ -151,5 +152,6 @@ class TicTacToe {
             result[3] = d;
 
         }
+        return currentLength;
     }
 }
